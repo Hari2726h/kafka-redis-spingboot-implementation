@@ -12,7 +12,10 @@ import redis.embedded.RedisServer;
 @Slf4j
 public final class LocalInfraBootstrap {
 
-	private static final String KAFKA_TOPIC = "history-events";
+	private static final String[] KAFKA_TOPICS = {
+		"history-events", "order-events", "inventory-events",
+		"shipment-events", "payment-events"
+	};
 	private static final int REDIS_PORT = 6379;
 	private static EmbeddedKafkaKraftBroker embeddedKafkaBroker;
 	private static RedisServer redisServer;
@@ -35,7 +38,7 @@ public final class LocalInfraBootstrap {
 			return;
 		}
 
-		embeddedKafkaBroker = new EmbeddedKafkaKraftBroker(1, 1, KAFKA_TOPIC);
+		embeddedKafkaBroker = new EmbeddedKafkaKraftBroker(1, 1, KAFKA_TOPICS);
 		embeddedKafkaBroker.brokerListProperty("spring.kafka.bootstrap-servers");
 		embeddedKafkaBroker.afterPropertiesSet();
 		log.info("Embedded Kafka started at {}", embeddedKafkaBroker.getBrokersAsString());
